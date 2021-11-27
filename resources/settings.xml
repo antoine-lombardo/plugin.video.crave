@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+
+  <!-- General -->
+  <category label="$LOCALIZE[128]">
+    <setting type="lsep" label="Authentification" />
+    <setting id="username" type="text" label="Nom d'utilisateur" default="" />
+    <setting id="password" type="text" label="Mot de passe" option="hidden" default="" />
+    <setting type="lsep" label="Préférences" />
+    <setting id="metadata_lang"  type="select" label="Langage métadata" values="fr|en" default="fr" />
+    <setting id="audio_lang"  type="select" label="Langage audio" values="fr|en" default="fr" />
+  </category>
+</settings>
