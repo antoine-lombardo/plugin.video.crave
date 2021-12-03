@@ -24,7 +24,7 @@ class MovieResultInfo(ResultInfo):
     def __init__(self):
         super().__init__()
         self.type = 'movie'
-        self.year: int = year
+        self.year: int = 0
 
 
 class SerieResultInfo(ResultInfo):

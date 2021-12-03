@@ -1,7 +1,7 @@
 import xbmcaddon
 
-__addon__ = xbmcaddon.Addon()
-metadata_lang = __addon__.getSetting("metadata_lang")
+ADDON = xbmcaddon.Addon()
+META_LANG = ADDON.getSetting("metadata_lang")
 
 DICT = {
     'username_error': {

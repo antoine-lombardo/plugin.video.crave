@@ -3,26 +3,25 @@ import xbmcplugin
 import xbmcaddon
 import sys
 import os
-import urllib.parse
+import utils
 import logging
-from url_generator import url_generator
+from urllib.parse import urlencode
+from pycrave.common.media import Media
 
-# Logger
-logger = logging.getLogger(__name__)
+# LOGGER
+LOGGER = logging.getLogger(__name__)
 
-base_url = sys.argv[0]
-addon_handle = int(sys.argv[1])
-args = urllib.parse.parse_qs(sys.argv[2][1:])
-__addon__ = xbmcaddon.Addon()
-__addonpath__ = __addon__.getAddonInfo('path')
-__resourcepath__ = os.path.join(__addonpath__, 'resources')
+# VARIABLES
+BASE_URL = utils.get_base_url()
+ADDON_HANDLE = utils.get_handle()
+RESOURCE_DIR = utils.get_ressource_dir()
 
 
 def add_search_item():
     list_item = xbmcgui.ListItem('Search')
-    list_item.setArt({'thumb': os.path.join(__resourcepath__, 'search.png')})
+    list_item.setArt({'thumb': os.path.join(RESOURCE_DIR, 'search.png')})
     xbmcplugin.addDirectoryItem(
-        handle=addon_handle, url=url_generator({'cmds': 'search'}), listitem=list_item, isFolder=True)
+        handle=ADDON_HANDLE, url=BASE_URL + '?' + urlencode({'cmds': 'search'}), listitem=list_item, isFolder=True)
 
 
 def add_item(element, total=None):
@@ -36,13 +35,13 @@ def add_item(element, total=None):
 
 def add_item_category(element, total):
     list_item = xbmcgui.ListItem(element.title)
-    list_item.setArt({'thumb': os.path.join(__resourcepath__, 'folder.png')})
+    list_item.setArt({'thumb': os.path.join(RESOURCE_DIR, 'folder.png')})
     if total is None:
         xbmcplugin.addDirectoryItem(
-            handle=addon_handle, url=url_generator(element.to_dict()), listitem=list_item, isFolder=True)
+            handle=ADDON_HANDLE, url=element.to_url(BASE_URL), listitem=list_item, isFolder=True)
     else:
         xbmcplugin.addDirectoryItem(
-            handle=addon_handle, url=url_generator(element.to_dict()), listitem=list_item, isFolder=True, totalItems=total)
+            handle=ADDON_HANDLE, url=element.to_url(BASE_URL), listitem=list_item, isFolder=True, totalItems=total)
 
 
 def add_item_result(element, total):
@@ -53,10 +52,10 @@ def add_item_result(element, total):
         'video', {'title': element.title})
     if total is None:
         xbmcplugin.addDirectoryItem(
-            handle=addon_handle, url=url_generator(element.to_dict()), listitem=list_item, isFolder=True)
+            handle=ADDON_HANDLE, url=element.to_url(BASE_URL), listitem=list_item, isFolder=True)
     else:
         xbmcplugin.addDirectoryItem(
-            handle=addon_handle, url=url_generator(element.to_dict()), listitem=list_item, isFolder=True, totalItems=total)
+            handle=ADDON_HANDLE, url=element.to_url(BASE_URL), listitem=list_item, isFolder=True, totalItems=total)
 
 
 def add_item_title(element):
@@ -85,8 +84,26 @@ def add_item_title_serie(element):
         list_item.setInfo(
             'video', infos)
         xbmcplugin.addDirectoryItem(
-            handle=addon_handle, url=url_generator(media.to_dict()), listitem=list_item, isFolder=False)
+            handle=ADDON_HANDLE, url=media.to_url(BASE_URL), listitem=list_item, isFolder=False)
 
 
 def add_item_title_movie(element):
-    pass
+    media = element.medias['default']
+    LOGGER.debug(media)
+    list_item = xbmcgui.ListItem(element.title)
+    if media.image != '':
+        list_item.setArt({'thumb': media.image,
+                          'poster': media.image,
+                          'banner': media.image,
+                          'fanart': media.image,
+                          'clearart': media.image,
+                          'clearlogo': media.image,
+                          'landscape': media.image,
+                          'icon': media.image,
+                          })
+    infos = {'title': element.title, 'plot': media.description, 'year': element.year,
+             'duration': media.duration}
+    list_item.setInfo(
+        'video', infos)
+    xbmcplugin.addDirectoryItem(
+        handle=ADDON_HANDLE, url=media.to_url(BASE_URL), listitem=list_item, isFolder=False)

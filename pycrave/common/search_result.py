@@ -1,4 +1,5 @@
 from typing import List, Dict, Any
+from urllib.parse import urlencode, parse_qs
 
 
 class SearchResult():
@@ -55,6 +56,21 @@ class SearchResult():
             "image": self.image,
             "platform_tag": self.platform_tag
         }
+
+    def to_url(self, base: str):
+        return base + '?' + urlencode({
+            "obj_type": self.obj_type,
+            "id": self.id
+        })
+
+    @classmethod
+    def from_url(cls, url: str):
+        args = parse_qs(url[1:])
+        obj = cls(id=args['id'][0] if 'id' in args else '')
+        return obj
+
+    def __str__(self) -> Dict[str, Any]:
+        return str(self.__dict__)
 
     def __str__(self) -> Dict[str, Any]:
         return str(self.__dict__)
