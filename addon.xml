@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 
-<addon id="plugin.video.crave" name="Crave" version="1.0.0" provider-name="antoine-lombardo">
+<addon id="plugin.video.crave" name="Crave" version="1.0.1" provider-name="antoine-lombardo">
   <requires>
     <import addon="script.module.inputstreamhelper" version="0.5.8"/>
     <import addon="script.module.requests" version="2.25.1+"/>
