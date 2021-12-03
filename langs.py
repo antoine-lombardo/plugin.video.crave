@@ -22,6 +22,6 @@ DICT = {
 def get_text(id: str) -> str:
     if id not in DICT:
         return ''
-    if metadata_lang not in DICT[id]:
+    if META_LANG not in DICT[id]:
         return ''
-    return DICT[id][metadata_lang]
+    return DICT[id][META_LANG]
